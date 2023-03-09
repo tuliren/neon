@@ -94,6 +94,11 @@ jobs:
       - name: Check that no warnings are produced
         run: ./run_clippy.sh
 
+      - name: Run Stoat Action
+        uses: stoat-dev/stoat-action@v0
+        if: always()
+
+
   gather-rust-build-stats:
     if: github.ref_name == 'main' || contains(github.event.pull_request.labels.*.name, 'run-extra-build-stats')
     runs-on: [ self-hosted, gen3, large ]
@@ -152,3 +157,8 @@ jobs:
               target_url: `${REPORT_URL}`,
               context: `Build stats (release)`,
             })
+
+      - name: Run Stoat Action
+        uses: stoat-dev/stoat-action@v0
+        if: always()
+

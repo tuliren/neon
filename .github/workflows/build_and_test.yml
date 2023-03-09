@@ -51,6 +51,11 @@ jobs:
         shell: bash
         id: build-tag
 
+      - name: Run Stoat Action
+        uses: stoat-dev/stoat-action@v0
+        if: always()
+
+
   check-codestyle-python:
     runs-on: [ self-hosted, gen3, small ]
     container:
@@ -303,6 +308,11 @@ jobs:
         if: matrix.build_type == 'debug'
         uses: ./.github/actions/save-coverage-data
 
+      - name: Run Stoat Action
+        uses: stoat-dev/stoat-action@v0
+        if: always()
+
+
   regress-tests:
     runs-on: [ self-hosted, gen3, large ]
     container:
@@ -336,6 +346,11 @@ jobs:
         if: matrix.build_type == 'debug'
         uses: ./.github/actions/save-coverage-data
 
+      - name: Run Stoat Action
+        uses: stoat-dev/stoat-action@v0
+        if: always()
+
+
   benchmarks:
     runs-on: [ self-hosted, gen3, small ]
     container:
@@ -364,6 +379,11 @@ jobs:
         env:
           VIP_VAP_ACCESS_TOKEN: "${{ secrets.VIP_VAP_ACCESS_TOKEN }}"
           PERF_TEST_RESULT_CONNSTR: "${{ secrets.PERF_TEST_RESULT_CONNSTR }}"
+
+      - name: Run Stoat Action
+        uses: stoat-dev/stoat-action@v0
+        if: always()
+
       # XXX: no coverage data handling here, since benchmarks are run on release builds,
       # while coverage is currently collected for the debug ones
 
@@ -403,6 +423,11 @@ jobs:
           ./scripts/pysync
 
           DATABASE_URL="$TEST_RESULT_CONNSTR" poetry run python3 scripts/ingest_regress_test_result.py --revision ${SHA} --reference ${GITHUB_REF} --build-type ${BUILD_TYPE} --ingest suites.json
+
+
+      - name: Run Stoat Action
+        uses: stoat-dev/stoat-action@v0
+        if: always()
 
   coverage-report:
     runs-on: [ self-hosted, gen3, small ]
@@ -480,6 +505,11 @@ jobs:
               \"target_url\": \"$REPORT_URL\"
             }"
 
+
+      - name: Run Stoat Action
+        uses: stoat-dev/stoat-action@v0
+        if: always()
+
   trigger-e2e-tests:
     runs-on: [ self-hosted, gen3, small ]
     container:
@@ -525,6 +555,11 @@ jobs:
               }
             }"
 
+
+      - name: Run Stoat Action
+        uses: stoat-dev/stoat-action@v0
+        if: always()
+
   neon-image:
     runs-on: [ self-hosted, gen3, large ]
     needs: [ tag ]
@@ -551,6 +586,11 @@ jobs:
       - name: Cleanup ECR folder
         run: rm -rf ~/.ecr
 
+      - name: Run Stoat Action
+        uses: stoat-dev/stoat-action@v0
+        if: always()
+
+
   compute-tools-image:
     runs-on: [ self-hosted, gen3, large ]
     needs: [ tag ]
@@ -571,6 +611,11 @@ jobs:
 
       - name: Cleanup ECR folder
         run: rm -rf ~/.ecr
+
+      - name: Run Stoat Action
+        uses: stoat-dev/stoat-action@v0
+        if: always()
+
 
   compute-node-image:
     runs-on: [ self-hosted, gen3, large ]
@@ -683,6 +728,11 @@ jobs:
         run: |
           docker compose -f ./docker-compose/docker-compose.yml logs || 0
           docker compose -f ./docker-compose/docker-compose.yml down
+
+
+      - name: Run Stoat Action
+        uses: stoat-dev/stoat-action@v0
+        if: always()
 
   promote-images:
     runs-on: [ self-hosted, gen3, small ]
@@ -845,6 +895,11 @@ jobs:
 
       - name: Cleanup ansible folder
         run: rm -rf ~/.ansible
+
+      - name: Run Stoat Action
+        uses: stoat-dev/stoat-action@v0
+        if: always()
+
 
   deploy:
     runs-on: [ self-hosted, gen3, small ]
